@@ -7,9 +7,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]public TMP_Text directionText;
     [SerializeField]public float fieldOfView;
     [SerializeField]public float speed;
-    [SerializeField] public float distance;
-    [SerializeField] public bool insideFOV;
-    [SerializeField] public bool inLineOfSight;
+
     void Update()
     {
         CheckIfPlayerIsInFront();
