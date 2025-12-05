@@ -1,30 +1,47 @@
 using UnityEngine;
+using TMPro;
 
 public class EnemyManager : MonoBehaviour
 {
-    public Transform player;
-    public float fieldOfView = 45f;
+    [SerializeField] public Transform player;
+    [SerializeField]public TMP_Text directionText;
+    [SerializeField]public float fieldOfView;
+    [SerializeField]public float speed;
+    [SerializeField] public float distance;
+    [SerializeField] public bool insideFOV;
+    [SerializeField] public bool inLineOfSight;
     void Update()
     {
         CheckIfPlayerIsInFront();
         CheckFieldOfView();
     }
-    // ---------------------------------------------
-    // 1. Check if the player is in front of the object
-    // ---------------------------------------------
+// ---------------------------------------------
+// 1. Check if the player is in front of the object
+// ---------------------------------------------
     void CheckIfPlayerIsInFront()
     {
         Vector3 toPlayer = (player.position - transform.position).normalized;
         float dot = Vector3.Dot(transform.forward, toPlayer);
+        float rotateSpeed = speed * Time.deltaTime;
         if (dot > 0)
-        Debug.Log("Player is IN FRONT of this object.");
+        {
+            Debug.Log("Player is IN FRONT of this object.");
+            directionText.text = "FRONT";
+
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, toPlayer, rotateSpeed, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDirection);
+        }
+
         else
-        Debug.Log("Player is BEHIND this object.");
-        Debug.Log(HitFromFront(toPlayer));
+        {
+            Debug.Log("Player is BEHIND this object.");
+            directionText.text = "BEHIND";
+        }
+        
     }
-    // ---------------------------------------------
-    // 2. Field of View (FOV) Detection
-    // ---------------------------------------------
+// ---------------------------------------------
+// 2. Field of View (FOV) Detection
+// ---------------------------------------------
     void CheckFieldOfView()
     {
         Vector3 toPlayer = (player.position - transform.position).normalized;
@@ -35,18 +52,8 @@ public class EnemyManager : MonoBehaviour
         else
         Debug.Log("Player is OUTSIDE the field of view.");
     }
-    // ---------------------------------------------
-    // 3. Hit direction detection
-    // ---------------------------------------------
-    public bool HitFromFront(Vector3 hitDirection)
-    {
-        hitDirection.Normalize();
-        float dot = Vector3.Dot(transform.forward, hitDirection);
-        return dot > 0;
-    }
-    // ---------------------------------------------
-    // (Bonus) Draw Gizmos for Visualization
-    // ---------------------------------------------
+
+
     void OnDrawGizmos()
     {
         if (player == null) return;
