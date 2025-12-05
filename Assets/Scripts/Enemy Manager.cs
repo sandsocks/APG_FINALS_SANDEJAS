@@ -10,13 +10,11 @@ public class EnemyManager : MonoBehaviour
 
     void Update()
     {
-        CheckIfPlayerIsInFront();
-        CheckFieldOfView();
+        EnemyDirection();
+        EnemyView();
     }
-// ---------------------------------------------
-// 1. Check if the player is in front of the object
-// ---------------------------------------------
-    void CheckIfPlayerIsInFront()
+
+    void EnemyDirection()
     {
         Vector3 toPlayer = (player.position - transform.position).normalized;
         float dot = Vector3.Dot(transform.forward, toPlayer);
@@ -37,10 +35,8 @@ public class EnemyManager : MonoBehaviour
         }
         
     }
-// ---------------------------------------------
-// 2. Field of View (FOV) Detection
-// ---------------------------------------------
-    void CheckFieldOfView()
+
+    void EnemyView()
     {
         Vector3 toPlayer = (player.position - transform.position).normalized;
         float dot = Vector3.Dot(transform.forward, toPlayer);
